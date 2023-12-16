@@ -15,11 +15,11 @@ sudo touch /data/web_static/releases/test/index.html
 
 content="\
 <html>
-   <head>
-   </head>
-   <body>
-      ALX Software Engineering
-   </body>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
 </html>"
 
 echo "$content" | sudo tee /data/web_static/releases/test/index.html
@@ -32,4 +32,4 @@ config="\\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t
 
 sudo sed -i "/server_name _;/a $config" /etc/nginx/sites-enabled/default
 
-sudo nginx -s reload
+sudo service nginx restart
