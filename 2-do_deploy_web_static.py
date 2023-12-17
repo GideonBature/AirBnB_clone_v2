@@ -63,7 +63,7 @@ def do_deploy(archive_path):
 
         run(f'sudo mv /data/web_static/releases/{fn}/web_static/* \
                 /data/web_static/releases/{fn}/')
-        
+
         run(f'sudo rm -rf /data/web_static/releases/{fn}/web_static')
 
         run('sudo rm -rf /data/web_static/current')
@@ -73,7 +73,7 @@ def do_deploy(archive_path):
 
         print('New version deployed!')
 
-    except:
+    except Exception:
         return False
 
     return True
