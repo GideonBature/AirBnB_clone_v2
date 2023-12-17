@@ -9,6 +9,8 @@ import os
 from os.path import exists
 
 env.hosts = ['204.236.240.142', '100.25.211.87']
+env.user = 'ubuntu'
+env.key_filename = '~/.ssh/school'
 
 
 def do_pack():
@@ -61,17 +63,17 @@ def do_deploy(archive_path):
 
         run(f'sudo mv /data/web_static/releases/{fn}/web_static/* \
                 /data/web_static/releases/{fn}/')
+        
+        run(f'sudo rm -rf /data/web_static/releases/{fn}/web_static')
 
         run('sudo rm -rf /data/web_static/current')
-
-        run(f'sudo rm -rf /data/web_static/releases/{fn}/web_static')
 
         run(f'sudo ln -s /data/web_static/releases/{fn}/ \
                 /data/web_static/current')
 
         print('New version deployed!')
 
-        return True
-    except Exception as e:
-        print(e)
+    except:
         return False
+
+    return True
