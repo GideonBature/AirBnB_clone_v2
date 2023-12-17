@@ -35,6 +35,7 @@ def do_pack():
     else:
         return None
 
+
 def do_deploy(archive_path):
     """distributes an archive to web servers
 
@@ -52,19 +53,21 @@ def do_deploy(archive_path):
 
         put(archive_path, '/tmp/')
 
-        sudo(f'mkdir -p /data/web_static/releases/{fn}/', pty=True)
+        run(f'sudo mkdir -p /data/web_static/releases/{fn}/')
 
-        sudo(f'tar -xzf /tmp/{f} -C /data/web_static/releases/{fn}/', pty=True)
+        run(f'sudo tar -xzf /tmp/{f} -C /data/web_static/releases/{fn}/')
 
-        sudo(f'rm /tmp/{f}', pty=True)
+        run(f'sudo rm /tmp/{f}')
 
-        sudo(f'mv /data/web_static/releases/{fn}/web_static/* /data/web_static/releases/{fn}/', pty=True)
+        run(f'sudo mv /data/web_static/releases/{fn}/web_static/* \
+                /data/web_static/releases/{fn}/')
 
-        sudo('rm -rf /data/web_static/current', pty=True)
-        
-        sudo(f'rm -rf /data/web_static/releases/{fn}/web_static', pty=True)
+        run('sudo rm -rf /data/web_static/current')
 
-        sudo(f'ln -s /data/web_static/releases/{fn}/ /data/web_static/current', pty=True)
+        run(f'sudo rm -rf /data/web_static/releases/{fn}/web_static')
+
+        run(f'sudo ln -s /data/web_static/releases/{fn}/ \
+                /data/web_static/current')
 
         print('New version deployed!')
 
