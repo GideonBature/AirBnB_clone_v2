@@ -6,6 +6,7 @@ function.
 from fabric.api import *
 from datetime import datetime
 import os
+import os.path
 from os.path import exists
 
 env.hosts = ['204.236.240.142', '100.25.211.87']
@@ -48,35 +49,40 @@ def do_deploy(archive_path):
     if not exists(archive_path):
         return False
 
-    try:
-        archive = archive_path.split('/')
-        f = archive[1]
-        fn = f.split('.')[0]
+    archive = archive_path.split('/')
+    f = archive[1]
+    fn = f.split('.')[0]
 
-        put(archive_path, '/tmp/')
-
-        run(f'sudo mkdir -p /data/web_static/releases/{fn}/')
-
-        run(f'sudo tar -xzf /tmp/{f} -C /data/web_static/releases/{fn}/')
-
-        run(f'sudo rm /tmp/{f}')
-
-        run(f'sudo mv /data/web_static/releases/{fn}/web_static/* \
-                /data/web_static/releases/{fn}/')
-
-        run(f'sudo rm -rf /data/web_static/releases/{fn}/web_static')
-
-        run('sudo rm -rf /data/web_static/current')
-
-        run(f'sudo ln -s /data/web_static/releases/{fn}/ \
-                /data/web_static/current')
-
-        print('New version deployed!')
-
-    except Exception:
+    if put(archive_path, '/tmp/').failed:
         return False
 
+    if run('sudo mkdir -p /data/web_static/releases/{}/'.format(fn)).failed:
+        return False
+
+    if run('sudo tar -xzf /tmp/{} -C /data/web_static/releases/{}/'.format(f, fn)).failed:
+        return False
+
+    if run('sudo rm /tmp/{}'.format(f)).failed:
+        return False
+
+    if run('sudo mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}/'.format(fn, fn)).failed:
+        return False
+
+    if run('sudo rm -rf /data/web_static/releases/{}/web_static'.format(fn)).failed:
+        return False
+
+    if run('sudo rm -rf /data/web_static/current').failed:
+        return False
+
+    if run('sudo ln -s /data/web_static/releases/{}/ \
+            /data/web_static/current'.format(fn)).failed:
+        return False
+
+    print('New version deployed!')
+
     return True
+
 
 
 def deploy():
@@ -89,3 +95,6 @@ def deploy():
         return False
 
     return do_deploy(file)
+
+if __name__ == '__main__':
+    deploy()
