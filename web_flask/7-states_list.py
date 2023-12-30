@@ -2,7 +2,6 @@
 """script that starts a Flask web application
 """
 from flask import Flask, render_template
-from markupsafe import escape
 from models import storage
 from models.state import State
 
@@ -18,14 +17,13 @@ def state_list():
     <UL> tag: 'List of all State objects present in DBStorage
     <LI> tag: description of one State
     """
-    states = storage.all(State).values()
-    states_sorted = sorted(states, key=lambda x: x.name)
+    states = storage.all()
 
-    return render_template('7-states_list.html', states=states_sorted)
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
-def teardown_appcontext(exception):
+def teardown(self):
     """Remove the current SQLAlchemy Session
     after each request
     """
