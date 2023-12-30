@@ -17,7 +17,7 @@ def state_list():
     <UL> tag: 'List of all State objects present in DBStorage
     <LI> tag: description of one State
     """
-    states = storage.all()
+    states = storage.all(State).values()
 
     return render_template('7-states_list.html', states=states)
 
