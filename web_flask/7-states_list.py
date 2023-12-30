@@ -23,7 +23,7 @@ def state_list():
 
 
 @app.teardown_appcontext
-def teardown(self):
+def teardown(exceptions):
     """Remove the current SQLAlchemy Session
     after each request
     """
