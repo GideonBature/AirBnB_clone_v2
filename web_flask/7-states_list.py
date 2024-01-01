@@ -18,12 +18,13 @@ def state_list():
     <LI> tag: description of one State
     """
     states = storage.all(State).values()
+    sorted_states = sorted(states, key=lambda x: x.name)
 
-    return render_template('7-states_list.html', states=states)
+    return render_template('7-states_list.html', states=sorted_states)
 
 
 @app.teardown_appcontext
-def teardown(exceptions):
+def flask_teardown(exc):
     """Remove the current SQLAlchemy Session
     after each request
     """
